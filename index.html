@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Шахматный гей-тест</title>
+<meta name="description" content="8 вопросов, одна доска и вся правда о твоём шахматном стиле.">
+<meta property="og:title" content="Шахматный гей-тест">
+<meta property="og:description" content="Лондон или ферзевый гамбит? Проверь себя.">
+<meta name="theme-color" content="#0d1524">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♞</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Noto+Sans+Symbols+2&family=Unbounded:wght@500;700;900&display=swap">
+<style>
+/* Layout: navy club-hall backdrop, walnut board left + question right on desktop, stacked on phones; a rainbow "гейометр" rides in the header. */
+:root {
+  --navy: #0d1524;
+  --navy-2: #16223a;
+  --line: #26365a;
+  --text: #eef2fb;
+  --muted: #93a2c3;
+  --maple: #ecd4ad;
+  --walnut: #a5683d;
+  --gold: #f5c451;
+  --danger: #ff6b8b;
+  --ok: #4ade80;
+  --rainbow: linear-gradient(90deg, #ff4d4d, #ff9f1c, #ffe14d, #3ddc84, #3b9bff, #a259ff);
+  --f-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-pieces: "Noto Sans Symbols 2", "Segoe UI Symbol", "DejaVu Sans", serif;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--navy); }
+body {
+  margin: 0; min-height: 100vh;
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(59,155,255,.12), transparent 60%),
+    radial-gradient(700px 500px at -10% 110%, rgba(162,89,255,.10), transparent 60%),
+    var(--navy);
+  color: var(--text); font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+button { font: inherit; color: inherit; }
+button:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+/* ---------- Header + meter ---------- */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: rgba(13,21,36,.88); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 11; background: var(--navy); }
+.top .wrap { display: flex; align-items: center; gap: 16px 24px; padding-block: 12px; flex-wrap: wrap; }
+.logo { font-family: var(--f-display); font-weight: 700; font-size: 15px; letter-spacing: .01em; display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.logo .k { font-family: var(--f-pieces); font-size: 24px; line-height: 1; color: var(--gold); }
+.meter { flex: 1 1 260px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; min-width: 0; }
+.meter-label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.meter-track { height: 12px; border-radius: 99px; background: var(--navy-2); border: 1px solid var(--line); overflow: hidden; }
+.meter-fill { height: 100%; width: 0%; background: var(--rainbow); background-size: 600px 100%; border-radius: 99px; transition: width .8s cubic-bezier(.3,1.3,.5,1); }
+.meter-val { font-family: var(--f-display); font-weight: 700; font-size: 15px; min-width: 3.4em; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- Intro ---------- */
+.intro { padding-block: clamp(32px, 7vw, 72px); display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+.eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+.intro h1 { font-family: var(--f-display); font-weight: 900; font-size: clamp(34px, 6.4vw, 68px); line-height: 1.02; margin: 0 0 18px; text-wrap: balance; }
+.intro h1 .rb { background: var(--rainbow); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.intro p.lead { color: var(--muted); font-size: 18px; max-width: 34em; margin: 0 0 28px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; padding: 0; list-style: none; }
+.facts li { font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 99px; background: var(--navy-2); border: 1px solid var(--line); color: var(--text); }
+.cta {
+  font-family: var(--f-display); font-weight: 700; font-size: 17px;
+  background: var(--gold); color: #1a1405; border: 0; border-radius: 14px;
+  padding: 16px 28px; cursor: pointer; box-shadow: 0 8px 0 #b98d1f; transition: transform .12s, box-shadow .12s;
+}
+.cta:hover { transform: translateY(-2px); box-shadow: 0 10px 0 #b98d1f; }
+.cta:active { transform: translateY(6px); box-shadow: 0 2px 0 #b98d1f; }
+.fine { font-size: 13px; color: var(--muted); margin: 22px 0 0; }
+.intro-board { max-width: 420px; width: 100%; justify-self: center; transform: rotate(-3deg); filter: drop-shadow(0 30px 50px rgba(0,0,0,.5)); }
+
+/* ---------- Quiz ---------- */
+.quiz { padding-block: 28px 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 40px; align-items: start; }
+.quiz.no-board { grid-template-columns: minmax(0, 640px); justify-content: center; }
+.board-col { position: sticky; top: 90px; min-width: 0; }
+.board-frame { background: #5b3a22; padding: 10px; border-radius: 12px; box-shadow: 0 30px 60px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.06); }
+.board { display: block; width: 100%; height: auto; border-radius: 4px; }
+.board .pc { transition: transform .5s cubic-bezier(.4,0,.2,1), opacity .3s; }
+.board .pc text { font-family: var(--f-pieces); font-size: 80px; paint-order: stroke; stroke-linejoin: round; }
+.board .arrow { transition: opacity .2s; }
+.board .arrows.focus .arrow:not(.on) { opacity: .15; }
+.board-caption { font-size: 14px; color: var(--muted); margin: 12px 2px 0; }
+
+.q-col { min-width: 0; display: grid; gap: 18px; }
+.q-step { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin: 0; }
+.q-dots { display: flex; gap: 6px; }
+.q-dots span { flex: 1; height: 4px; border-radius: 4px; background: var(--line); }
+.q-dots span.done { background: var(--gold); }
+.q-title { font-family: var(--f-display); font-weight: 700; font-size: clamp(22px, 3.4vw, 32px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.q-sub { color: var(--muted); margin: -6px 0 0; }
+
+.opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.opts.wide { grid-template-columns: minmax(0, 1fr); }
+.opt {
+  display: flex; align-items: center; gap: 12px; text-align: left;
+  background: var(--navy-2); border: 2px solid var(--line); border-radius: 14px;
+  padding: 14px 16px; cursor: pointer; min-height: 60px;
+  transition: border-color .15s, transform .15s, background .15s, opacity .2s;
+}
+.opt:hover:not(:disabled) { border-color: var(--sw, var(--gold)); transform: translateY(-2px); }
+.opt:disabled { cursor: default; }
+.opt.dim { opacity: .35; }
+.opt.picked { border-color: var(--sw, var(--gold)); background: #1d2c4b; }
+.opt .sw { width: 14px; height: 14px; border-radius: 4px; background: var(--sw); flex: none; box-shadow: 0 0 0 3px rgba(255,255,255,.06); }
+.opt .t { display: grid; gap: 2px; min-width: 0; }
+.opt .m { font-weight: 800; font-size: 17px; }
+.opt .h { font-size: 13px; color: var(--muted); }
+
+.verdict {
+  border-radius: 16px; padding: 18px 20px; display: grid; gap: 6px;
+  background: var(--navy-2); border: 2px solid var(--line);
+  animation: pop .45s cubic-bezier(.3,1.5,.5,1) both;
+}
+.verdict.bad { border-color: var(--danger); }
+.verdict.good { border-color: var(--ok); }
+.verdict .delta { font-family: var(--f-display); font-weight: 900; font-size: 26px; font-variant-numeric: tabular-nums; }
+.verdict.bad .delta { color: var(--danger); }
+.verdict.good .delta { color: var(--ok); }
+.verdict .note { margin: 0; font-size: 16px; }
+.next { justify-self: start; }
+
+/* ---------- Result ---------- */
+.result { padding-block: 36px 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.r-pct { font-family: var(--f-display); font-weight: 900; font-size: clamp(72px, 16vw, 150px); line-height: .9; margin: 0; font-variant-numeric: tabular-nums; background: var(--rainbow); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.r-of { font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 8px 0 22px; }
+.r-rank { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+.r-title { font-family: var(--f-display); font-weight: 900; font-size: clamp(28px, 4.6vw, 44px); line-height: 1.05; margin: 0 0 12px; text-wrap: balance; }
+.r-text { color: var(--muted); font-size: 17px; margin: 0 0 24px; max-width: 34em; }
+.r-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.ghost { background: transparent; border: 2px solid var(--line); border-radius: 14px; padding: 14px 22px; font-weight: 800; cursor: pointer; }
+.ghost:hover { border-color: var(--gold); }
+.copied { font-size: 14px; color: var(--ok); font-weight: 700; }
+.share-fallback { width: 100%; margin-top: 12px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--navy-2); color: var(--text); font: inherit; font-size: 14px; }
+
+.photo { margin: 0; border-radius: 18px; overflow: hidden; background: var(--navy-2); border: 2px solid var(--line); }
+.photo.chad { border-color: var(--gold); box-shadow: 0 0 0 6px rgba(245,196,81,.12), 0 30px 60px rgba(0,0,0,.45); }
+.photo img { display: block; width: 100%; height: auto; max-width: 100%; }
+.photo.blur img { filter: blur(14px) saturate(.6); transform: scale(1.08); }
+.photo figcaption { padding: 14px 16px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
+.photo figcaption b { color: var(--text); }
+.missing { aspect-ratio: 1024 / 656; max-width: 100%; display: grid; place-items: center; place-content: center; text-align: center; gap: 8px; padding: 24px;
+  background: repeating-linear-gradient(45deg, var(--navy-2) 0 14px, #121c31 14px 28px); }
+.missing .ic { font-size: 56px; line-height: 1; opacity: .7; }
+.missing .err { font-family: var(--f-display); font-weight: 700; font-size: clamp(16px, 2.6vw, 22px); }
+.missing .why { font-size: 14px; color: var(--danger); font-weight: 700; }
+
+.log { grid-column: 1 / -1; margin: 8px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.log li { background: var(--navy-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; min-width: 0; }
+.log .lq { font-size: 13px; color: var(--muted); grid-column: 1 / -1; }
+.log .la { font-weight: 800; min-width: 0; overflow-wrap: anywhere; }
+.log .ld { font-family: var(--f-display); font-weight: 700; font-variant-numeric: tabular-nums; }
+.log .ld.bad { color: var(--danger); }
+.log .ld.good { color: var(--ok); }
+.log-title { grid-column: 1 / -1; font-family: var(--f-display); font-size: 18px; margin: 16px 0 0; }
+
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+footer .wrap { padding-block: 18px; }
+
+@keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.97) } to { opacity: 1; transform: none } }
+@keyframes shake { 0%,100% { transform: none } 20% { transform: translateX(-6px) rotate(-1deg) } 40% { transform: translateX(6px) rotate(1deg) } 60% { transform: translateX(-4px) } 80% { transform: translateX(4px) } }
+.shake { animation: shake .45s; }
+
+@media (max-width: 860px) {
+  .intro { grid-template-columns: 1fr; gap: 28px; }
+  .intro-board { max-width: 300px; order: -1; }
+  .quiz, .result { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .quiz { gap: 14px; }
+  .quiz .q-col { display: contents; }
+  .q-dots, .q-step, .q-title, .q-sub { order: 0; }
+  .board-col { position: static; order: 1; width: min(100%, 50vh); justify-self: center; }
+  .opts, .verdict, .next { order: 2; }
+  .q-sub { margin: 0; }
+}
+@media (max-width: 420px) {
+  .opts { gap: 8px; }
+  .opt { padding: 12px; gap: 10px; }
+  .opt .m { font-size: 16px; }
+  .logo span.txt { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="logo"><span class="k">♞&#xFE0E;</span><span class="txt">Шахматный гей-тест</span></div>
+    <div class="meter" aria-label="Гейометр">
+      <span class="meter-label">Гейометр</span>
+      <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+      <span class="meter-val" id="meterVal">0%</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="intro" id="intro">
+    <div>
+      <p class="eyebrow">Сертифицировано комиссией из трёх лондонистов</p>
+      <h1>Насколько ты <span class="rb">гей</span> в шахматах?</h1>
+      <p class="lead">Восемь вопросов о дебютах, взятии на проходе и твоих взглядах на шахматный мир. Каждый ответ двигает гейометр. В конце узнаешь своё звание.</p>
+      <ul class="facts">
+        <li>8 вопросов</li>
+        <li>2 минуты</li>
+        <li>Точность ±64 клетки</li>
+      </ul>
+      <button class="cta" id="start" type="button">Начать тест</button>
+      <p class="fine">Это шутка для друзей. Лондон — законный дебют. Наверное.</p>
+    </div>
+    <svg class="board intro-board" id="introBoard" viewBox="0 0 800 800" role="img" aria-label="Шахматная доска с Лондонской системой"></svg>
+  </section>
+
+  <section class="quiz" id="quiz" hidden>
+    <div class="board-col" id="boardCol">
+      <div class="board-frame">
+        <svg class="board" id="board" viewBox="0 0 800 800" role="img" aria-label="Позиция на доске"></svg>
+      </div>
+      <p class="board-caption" id="boardCaption"></p>
+    </div>
+    <div class="q-col">
+      <div class="q-dots" id="dots" aria-hidden="true"></div>
+      <p class="q-step" id="qStep"></p>
+      <h2 class="q-title" id="qTitle"></h2>
+      <p class="q-sub" id="qSub"></p>
+      <div class="opts" id="opts"></div>
+      <div class="verdict" id="verdict" hidden aria-live="polite">
+        <div class="delta" id="vDelta"></div>
+        <p class="note" id="vNote"></p>
+      </div>
+      <button class="cta next" id="next" type="button" hidden>Дальше</button>
+    </div>
+  </section>
+
+  <section class="result" id="result" hidden>
+    <div>
+      <p class="r-pct" id="rPct">0%</p>
+      <p class="r-of">шахматного гейства</p>
+      <p class="r-rank">Твоё звание</p>
+      <h2 class="r-title" id="rTitle"></h2>
+      <p class="r-text" id="rText"></p>
+      <div class="r-actions">
+        <button class="cta" id="again" type="button">Пройти ещё раз</button>
+        <button class="ghost" id="share" type="button">Скопировать результат</button>
+        <span class="copied" id="copied" hidden>Скопировано</span>
+      </div>
+      <input class="share-fallback" id="shareFallback" type="text" readonly hidden aria-label="Текст результата">
+    </div>
+    <div id="rPhoto"></div>
+    <h3 class="log-title">Протокол партии</h3>
+    <ul class="log" id="log"></ul>
+  </section>
+
+</main>
+
+<footer><div class="wrap">Все совпадения с реальными шахматистами случайны. Кроме Магнуса. Магнус настоящий.</div></footer>
+
+<script>
+(() => {
+  const COLORS = ['#3b9bff', '#ff9f1c', '#b47bff', '#2ed3b7', '#a3e635'];
+  const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+
+  /* pts: how much the answer moves the meter (sum of the worst answers = 100) */
+  const QUESTIONS = [
+    {
+      title: 'Твой первый ход в партии?',
+      sub: 'Белые, начальная позиция. Выбирай честно, доска всё видит.',
+      fen: START,
+      caption: 'Начальная позиция. Ход белых.',
+      opts: [
+        { m: '1.e4', h: 'Королевская пешка', from: 'e2', to: 'e4', pts: -3, note: '1.e4 — best by test. Фишер одобряет, гейометр немного остывает.' },
+        { m: '1.d4', h: 'Ферзевая пешка', from: 'd2', to: 'd4', pts: 10, note: 'Закрытые дебюты, закрытая личность. Записали.' },
+        { m: '1.c4', h: 'Английское начало', from: 'c2', to: 'c4', pts: 7, note: 'Английское начало. Чай с оттопыренным мизинцем засчитан.' },
+        { m: '1.Кf3', h: 'Сначала конь', from: 'g1', to: 'f3', pts: 3, note: 'Конём с первого хода? Скрываешь намерения. Подозрительно.' }
+      ]
+    },
+    {
+      title: '1.d4 d5. Твой ход?',
+      sub: 'Очень важный момент. От него зависит всё.',
+      fen: 'rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR',
+      caption: 'После 1.d4 d5. Ход белых.',
+      opts: [
+        { m: '2.Сf4', h: 'Лондонская система', from: 'c1', to: 'f4', pts: 16, note: 'ЛОНДОН ДЕТЕКТЕД. Сирена включена, соседи предупреждены.' },
+        { m: '2.c4', h: 'Ферзевый гамбит', from: 'c2', to: 'c4', pts: 0, note: 'Ферзевый гамбит. Классика, уважение, никаких вопросов.' },
+        { m: '2.Кf3', h: 'Гибкий ход', from: 'g1', to: 'f3', pts: 3, note: 'Пока не Лондон. Но слон на c1 уже собирает чемодан в сторону f4.' },
+        { m: '2.e4', h: 'Гамбит Блэкмара-Димера', from: 'e2', to: 'e4', pts: 0, note: 'Блэкмар-Димер. Ты безумец, но точно не по нашей части.' }
+      ]
+    },
+    {
+      title: 'Соперник сыграл 1.e4. Чем отвечаешь?',
+      sub: 'Ты играешь чёрными. Доска развёрнута.',
+      fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR',
+      flip: true,
+      caption: 'После 1.e4. Ход чёрных.',
+      opts: [
+        { m: '1...e5', h: 'Открытая игра', from: 'e7', to: 'e5', pts: 0, note: 'Открытая игра, открытое сердце. Чисто.' },
+        { m: '1...c5', h: 'Сицилианская защита', from: 'c7', to: 'c5', pts: 0, note: 'Сицилианская. Агрессия и острота засчитаны.' },
+        { m: '1...e6', h: 'Французская защита', from: 'e7', to: 'e6', pts: 0, note: 'Французская. Солидно, по-мужски, с багетом под мышкой.' },
+        { m: '1...c6', h: 'Каро-Канн', from: 'c7', to: 'c6', pts: 14, note: 'Каро-Канн. Защищаешься с первого хода. Гейометр это заметил.' },
+        { m: '1...d6', h: 'Защита Пирца', from: 'd7', to: 'd6', pts: 14, note: 'Пирц. Пассивность занесена в протокол.' }
+      ]
+    },
+    {
+      title: '1.e4 e5. Твой второй ход?',
+      sub: 'Снова белыми. Тут проверяется характер.',
+      fen: 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR',
+      caption: 'После 1.e4 e5. Ход белых.',
+      opts: [
+        { m: '2.Кf3', h: 'Развитие', from: 'g1', to: 'f3', pts: 0, note: 'Развиваешь фигуры. Скучно, но правильно.' },
+        { m: '2.Сc4', h: 'Слон на f7', from: 'f1', to: 'c4', pts: 4, note: 'Слон на c4 смотрит на f7 слишком влюблённо.' },
+        { m: '2.Фh5', h: 'Ферзь вперёд', from: 'd1', to: 'h5', pts: 10, note: 'Ферзь вышел погулять на втором ходу. Детский мат, взрослые проблемы.' },
+        { m: '2.Кре2', h: 'Бонгклауд', from: 'e1', to: 'e2', pts: -8, note: 'БОНГКЛАУД! Сам Магнус так играл. Минус гейство, плюс аура.' }
+      ]
+    },
+    {
+      title: 'Чёрные только что сыграли d7–d5. Что делаешь?',
+      sub: 'Позиция после 1.e4 e6 2.e5 d5. Подсказка: пешка на d5 прошла мимо твоей.',
+      fen: 'rnbqkbnr/ppp2ppp/4p3/3pP3/8/8/PPPP1PPP/RNBQKBNR',
+      caption: 'После 1.e4 e6 2.e5 d5. Ход белых.',
+      opts: [
+        { m: '3.ed6 e.p.', h: 'Взятие на проходе', from: 'e5', to: 'd6', capture: 'd5', pts: 0, note: 'Holy hell! Взятие на проходе — путь гигачада.' },
+        { m: '3.d4', h: 'Укрепить центр', from: 'd2', to: 'd4', pts: 7, note: 'Нормальный ход. Но ты испугался взятия на проходе, мы это видели.' },
+        { m: 'А так можно было?', h: 'Не знаю такого правила', pts: 14, note: 'Google en passant. Срочно.' }
+      ]
+    },
+    {
+      title: 'Кто станет следующим чемпионом мира?',
+      sub: 'Без доски. Просто смотрим тебе в глаза.',
+      opts: [
+        { m: 'Гукеш', h: 'Индия', pts: 14, note: 'Записали. Без комментариев.' },
+        { m: 'Синдаров', h: 'Узбекистан', pts: -5, note: 'Узбекская мощь. Гейометр уважительно опускается.' }
+      ]
+    },
+    {
+      title: 'Какой шахматный контент ты смотришь?',
+      sub: 'Ты знаешь, что мы узнаем правду.',
+      opts: [
+        { m: 'GothamChess', h: 'Ладья на e4!!!', pts: 10, note: '«THE ROOK!!!» — кричит твоё сердце каждое утро.' },
+        { m: 'Хикару', h: 'Чат, чат, чат', pts: 4, note: 'Чат, чат, чат. Терпимо.' },
+        { m: 'Разбираю свои партии с движком', h: 'Скучно, но полезно', pts: 0, note: 'Честная работа. Магнус бы кивнул.' },
+        { m: 'Рилсы с фонком', h: '«Гений шахмат делает невозможное»', pts: 14, note: 'Фонк + шахматы = ларпинг сотого уровня.' }
+      ]
+    },
+    {
+      title: 'Ты только что проиграл партию. Твои действия?',
+      sub: 'Последний вопрос. Будь мужчиной.',
+      opts: [
+        { m: 'Жму руку и разбираю ошибки', h: 'GG WP', pts: 0, note: 'Поведение чемпиона. Почти Магнус.' },
+        { m: 'Пишу в чат «повезло»', h: 'Соль', pts: 6, note: 'Соль засчитана. Повезло, конечно.' },
+        { m: 'Обвиняю соперника в читах', h: 'У него точно движок', pts: 8, note: 'У него 800 Эло, но да, конечно, движок.' },
+        { m: 'Ставлю ещё 1+0 на тильте', h: 'Сейчас отыграюсь', pts: 4, note: 'Тильт — тоже стиль игры.' }
+      ]
+    }
+  ];
+
+  const TIERS = [
+    { max: 20, title: 'Шахматный гигачад', text: 'Ни одного лишнего движения слоном на f4. Открытые дебюты, взятие на проходе, правильный выбор чемпиона. Комиссия единогласно присваивает тебе высшее звание.', photo: 'chad' },
+    { max: 50, title: 'Подозрительный позиционщик', text: 'Вроде играешь нормально, но иногда рука сама тянется к Сf4. Комиссия наблюдает за тобой. Ещё пара партий в Каро-Канн, и звание будет пересмотрено.', photo: 'blur' },
+    { max: 101, title: 'Шахматный ларпер', text: 'Лондон, Каро-Канн, рилсы с фонком. Ты не играешь в шахматы, ты играешь в шахматиста. Комиссия просит сдать пешки на вахте.', photo: 'missing' }
+  ];
+
+  /* ---------- Board ---------- */
+  const NS = 'http://www.w3.org/2000/svg';
+  const GLYPH = { k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟' };
+  const LIGHT = '#ecd4ad', DARK = '#a5683d';
+
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function parseFen(fen) {
+    const map = {};
+    fen.split(' ')[0].split('/').forEach((row, ri) => {
+      let f = 0;
+      for (const ch of row) {
+        if (/\d/.test(ch)) { f += +ch; continue; }
+        map['abcdefgh'[f] + (8 - ri)] = ch;
+        f++;
+      }
+    });
+    return map;
+  }
+  function xy(sq, flip) {
+    const f = sq.charCodeAt(0) - 97, r = +sq[1] - 1;
+    const x = flip ? 7 - f : f, y = flip ? r : 7 - r;
+    return [x * 100, y * 100];
+  }
+  function pieceNode(ch, sq, flip, parent) {
+    const white = ch === ch.toUpperCase();
+    const [x, y] = xy(sq, flip);
+    const g = el('g', { class: 'pc' }, parent);
+    g.dataset.sq = sq;
+    g.style.transform = `translate(${x}px, ${y}px)`;
+    const t = el('text', {
+      x: 50, y: 56, 'text-anchor': 'middle', 'dominant-baseline': 'central',
+      fill: white ? '#fbf6ec' : '#1c1a20',
+      stroke: white ? '#23180f' : '#0c0b0e',
+      'stroke-width': white ? 3 : 1.5
+    }, g);
+    t.textContent = GLYPH[ch.toLowerCase()] + '︎';
+    return g;
+  }
+  function drawBoard(svg, fen, flip) {
+    svg.innerHTML = '';
+    const sqs = el('g', {}, svg);
+    for (let x = 0; x < 8; x++) for (let y = 0; y < 8; y++) {
+      el('rect', { x: x * 100, y: y * 100, width: 100, height: 100, fill: (x + y) % 2 ? DARK : LIGHT }, sqs);
+    }
+    // coordinates
+    const coords = el('g', { 'font-family': 'Manrope, system-ui, sans-serif', 'font-weight': 800, 'font-size': 17 }, svg);
+    for (let i = 0; i < 8; i++) {
+      const file = flip ? 'hgfedcba'[i] : 'abcdefgh'[i];
+      const rank = flip ? i + 1 : 8 - i;
+      el('text', { x: i * 100 + 92, y: 792, 'text-anchor': 'end', fill: (i + 7) % 2 ? DARK : LIGHT }, coords).textContent = file;
+      el('text', { x: 6, y: i * 100 + 20, fill: i % 2 ? LIGHT : DARK }, coords).textContent = rank;
+    }
+    el('g', { class: 'hl' }, svg);
+    const pcs = el('g', { class: 'pieces' }, svg);
+    const map = parseFen(fen);
+    for (const sq in map) pieceNode(map[sq], sq, flip, pcs);
+    el('g', { class: 'arrows' }, svg);
+  }
+  function arrowPoints(from, to, flip) {
+    const [ax, ay] = xy(from, flip), [bx, by] = xy(to, flip);
+    const x1 = ax + 50, y1 = ay + 50, x2 = bx + 50, y2 = by + 50;
+    const L = Math.hypot(x2 - x1, y2 - y1) - 18;
+    const a = Math.atan2(y2 - y1, x2 - x1);
+    const sw = 15, hw = 42, hl = 36;
+    const local = [[0, -sw / 2], [L - hl, -sw / 2], [L - hl, -hw / 2], [L, 0], [L - hl, hw / 2], [L - hl, sw / 2], [0, sw / 2]];
+    const c = Math.cos(a), s = Math.sin(a);
+    return local.map(([px, py]) => `${(x1 + px * c - py * s).toFixed(1)},${(y1 + px * s + py * c).toFixed(1)}`).join(' ');
+  }
+  function drawArrows(svg, opts, flip) {
+    const g = svg.querySelector('.arrows');
+    g.innerHTML = '';
+    opts.map((o, i) => ({ o, i }))
+      .filter(({ o }) => o.from)
+      .sort((A, B) => dist(B.o) - dist(A.o)) // long arrows first so short ones stay visible on top
+      .forEach(({ o, i }) => {
+        const p = el('polygon', { class: 'arrow', points: arrowPoints(o.from, o.to, flip), fill: COLORS[i], 'fill-opacity': .85, stroke: 'rgba(0,0,0,.35)', 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+        p.dataset.i = i;
+      });
+  }
+  function dist(o) { return Math.hypot(o.from.charCodeAt(0) - o.to.charCodeAt(0), o.from[1] - o.to[1]); }
+  function movePiece(svg, o, flip) {
+    const pcs = svg.querySelector('.pieces');
+    const hl = svg.querySelector('.hl');
+    [o.from, o.to].forEach(sq => { const [x, y] = xy(sq, flip); el('rect', { x, y, width: 100, height: 100, fill: 'rgba(255,214,79,.5)' }, hl); });
+    const victim = pcs.querySelector(`[data-sq="${o.capture || o.to}"]`);
+    if (victim) { victim.style.opacity = 0; setTimeout(() => victim.remove(), 300); }
+    const mover = pcs.querySelector(`[data-sq="${o.from}"]`);
+    if (!mover) return;
+    pcs.appendChild(mover);
+    const [x, y] = xy(o.to, flip);
+    requestAnimationFrame(() => { mover.style.transform = `translate(${x}px, ${y}px)`; mover.dataset.sq = o.to; });
+  }
+
+  /* ---------- Intro board: a London setup with its trademark arrow ---------- */
+  const introBoard = document.getElementById('introBoard');
+  drawBoard(introBoard, 'rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR', false);
+  el('polygon', { points: arrowPoints('c1', 'f4', false), fill: '#ff6b8b', 'fill-opacity': .9 }, introBoard.querySelector('.arrows'));
+
+  /* ---------- Quiz flow ---------- */
+  const $ = id => document.getElementById(id);
+  const intro = $('intro'), quiz = $('quiz'), result = $('result');
+  const board = $('board'), boardCol = $('boardCol');
+  const optsBox = $('opts'), verdict = $('verdict'), nextBtn = $('next');
+  let idx = 0, score = 0, answers = [];
+
+  const dots = $('dots');
+  QUESTIONS.forEach(() => dots.appendChild(document.createElement('span')));
+
+  function meter(v) {
+    const p = Math.max(0, Math.min(100, Math.round(v)));
+    $('meterFill').style.width = p + '%';
+    $('meterVal').textContent = p + '%';
+  }
+
+  function render() {
+    const q = QUESTIONS[idx];
+    [...dots.children].forEach((d, i) => d.classList.toggle('done', i < idx));
+    $('qStep').textContent = `Вопрос ${idx + 1} из ${QUESTIONS.length}`;
+    $('qTitle').textContent = q.title;
+    $('qSub').textContent = q.sub || '';
+    verdict.hidden = true; nextBtn.hidden = true;
+    quiz.classList.toggle('no-board', !q.fen);
+    boardCol.hidden = !q.fen;
+    if (q.fen) {
+      drawBoard(board, q.fen, !!q.flip);
+      drawArrows(board, q.opts, !!q.flip);
+      $('boardCaption').textContent = q.caption || '';
+    }
+    optsBox.innerHTML = '';
+    optsBox.classList.toggle('wide', !q.fen && q.opts.some(o => o.m.length > 14));
+    q.opts.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'opt';
+      b.style.setProperty('--sw', o.from ? COLORS[i] : 'var(--muted)');
+      b.innerHTML = `${o.from ? '<span class="sw"></span>' : ''}<span class="t"><span class="m"></span><span class="h"></span></span>`;
+      b.querySelector('.m').textContent = o.m;
+      b.querySelector('.h').textContent = o.h || '';
+      b.addEventListener('mouseenter', () => focusArrow(i));
+      b.addEventListener('focus', () => focusArrow(i));
+      b.addEventListener('mouseleave', () => focusArrow(-1));
+      b.addEventListener('blur', () => focusArrow(-1));
+      b.addEventListener('click', () => choose(i, b));
+      optsBox.appendChild(b);
+    });
+  }
+
+  function focusArrow(i) {
+    const g = board.querySelector('.arrows');
+    if (!g || g.dataset.locked) return;
+    g.classList.toggle('focus', i >= 0);
+    g.querySelectorAll('.arrow').forEach(a => a.classList.toggle('on', +a.dataset.i === i));
+  }
+
+  function choose(i, btn) {
+    const q = QUESTIONS[idx], o = q.opts[i];
+    optsBox.querySelectorAll('.opt').forEach(b => { b.disabled = true; if (b !== btn) b.classList.add('dim'); });
+    btn.classList.add('picked');
+    if (q.fen) {
+      const g = board.querySelector('.arrows');
+      g.dataset.locked = '1';
+      g.innerHTML = '';
+      if (o.from) movePiece(board, o, !!q.flip);
+    }
+    score += o.pts;
+    answers.push({ q: q.title, a: o.m, pts: o.pts });
+    setTimeout(() => {
+      meter(score);
+      $('vDelta').textContent = o.pts > 0 ? `+${o.pts}% гейства` : o.pts < 0 ? `−${Math.abs(o.pts)}% гейства` : '0%. Чисто';
+      $('vNote').textContent = o.note;
+      verdict.className = 'verdict ' + (o.pts > 0 ? 'bad' : 'good');
+      verdict.hidden = false;
+      if (o.pts >= 10) { document.querySelector('.meter').classList.remove('shake'); void document.body.offsetWidth; document.querySelector('.meter').classList.add('shake'); }
+      nextBtn.textContent = idx === QUESTIONS.length - 1 ? 'Узнать результат' : 'Дальше';
+      nextBtn.hidden = false;
+      nextBtn.focus({ preventScroll: true });
+      if (innerWidth <= 860) verdict.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, o.from ? 550 : 150);
+  }
+
+  nextBtn.addEventListener('click', () => {
+    idx++;
+    if (idx < QUESTIONS.length) { render(); scrollTo({ top: 0, behavior: 'smooth' }); }
+    else showResult();
+  });
+
+  $('start').addEventListener('click', () => {
+    intro.hidden = true; quiz.hidden = false;
+    idx = 0; score = 0; answers = []; meter(0);
+    render(); scrollTo({ top: 0 });
+  });
+
+  function showResult() {
+    quiz.hidden = true; result.hidden = false;
+    scrollTo({ top: 0 });
+    const pct = Math.max(0, Math.min(100, Math.round(score)));
+    const tier = TIERS.find(t => pct <= t.max);
+    $('rTitle').textContent = tier.title;
+    $('rText').textContent = tier.text;
+    $('copied').hidden = true; $('shareFallback').hidden = true;
+
+    // count-up
+    const el2 = $('rPct'); const t0 = performance.now(); const dur = 1200;
+    const step = now => {
+      const k = Math.min(1, (now - t0) / dur);
+      el2.textContent = Math.round(pct * (1 - Math.pow(1 - k, 3))) + '%';
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+
+    const ph = $('rPhoto');
+    if (tier.photo === 'chad') {
+      ph.innerHTML = '<figure class="photo chad"><img src="magnus.jpg" alt="Магнус Карлсен за доской" width="1024" height="656"><figcaption><b>Так выглядит человек, прошедший тест.</b> Добро пожаловать в клуб.</figcaption></figure>';
+    } else if (tier.photo === 'blur') {
+      ph.innerHTML = '<figure class="photo blur"><img src="magnus.jpg" alt="Размытое фото" width="1024" height="656"><figcaption><b>Изображение размыто.</b> Для полной резкости не хватает примерно 400 Эло.</figcaption></figure>';
+    } else {
+      ph.innerHTML = '<figure class="photo"><div class="missing"><div class="ic">♟&#xFE0E;</div><div class="err">Фото не найдено</div><div class="why">Причина: слишком маленький Эло</div></div><figcaption><b>Ошибка 404.</b> Попробуй сыграть что-нибудь кроме Лондона и пройди тест снова.</figcaption></figure>';
+    }
+
+    const log = $('log'); log.innerHTML = '';
+    answers.forEach(a => {
+      const li = document.createElement('li');
+      const d = a.pts > 0 ? `+${a.pts}` : a.pts < 0 ? `−${Math.abs(a.pts)}` : '0';
+      li.innerHTML = '<span class="lq"></span><span class="la"></span><span class="ld"></span>';
+      li.querySelector('.lq').textContent = a.q;
+      li.querySelector('.la').textContent = a.a;
+      const ld = li.querySelector('.ld'); ld.textContent = d; ld.classList.add(a.pts > 0 ? 'bad' : 'good');
+      log.appendChild(li);
+    });
+  }
+
+  $('again').addEventListener('click', () => {
+    result.hidden = true; intro.hidden = false; meter(0); scrollTo({ top: 0 });
+  });
+
+  $('share').addEventListener('click', () => {
+    const pct = $('meterVal').textContent;
+    const text = `Мой шахматный гей-тест: ${pct}, звание «${$('rTitle').textContent}». Проверь себя: ${location.href.split('#')[0]}`;
+    const fallback = () => { const f = $('shareFallback'); f.value = text; f.hidden = false; f.select(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => { $('copied').hidden = false; }, fallback);
+    } else fallback();
+  });
+})();
+</script>
+</body>
+</html>
