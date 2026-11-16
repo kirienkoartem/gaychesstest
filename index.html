@@ -213,7 +213,7 @@ footer .wrap { padding-block: 18px; }
     <div>
       <p class="eyebrow">Сертифицировано комиссией из трёх лондонистов</p>
       <h1>Насколько ты <span class="rb">гей</span> в шахматах?</h1>
-      <p class="lead">Восемь вопросов о дебютах, взятии на проходе и твоих взглядах на шахматный мир. Каждый ответ двигает гейометр. В конце узнаешь своё звание.</p>
+      <p class="lead">Восемь вопросов о дебютах, взятии на проходе и твоих взглядах на шахматный мир. Гейометр всё считает молча. Результат и звание узнаешь только в конце.</p>
       <ul class="facts">
         <li>8 вопросов</li>
         <li>2 минуты</li>
@@ -239,7 +239,6 @@ footer .wrap { padding-block: 18px; }
       <p class="q-sub" id="qSub"></p>
       <div class="opts" id="opts"></div>
       <div class="verdict" id="verdict" hidden aria-live="polite">
-        <div class="delta" id="vDelta"></div>
         <p class="note" id="vNote"></p>
       </div>
       <button class="cta next" id="next" type="button" hidden>Дальше</button>
@@ -282,7 +281,7 @@ footer .wrap { padding-block: 18px; }
       fen: START,
       caption: 'Начальная позиция. Ход белых.',
       opts: [
-        { m: '1.e4', h: 'Королевская пешка', from: 'e2', to: 'e4', pts: -3, note: '1.e4 — best by test. Фишер одобряет, гейометр немного остывает.' },
+        { m: '1.e4', h: 'Королевская пешка', from: 'e2', to: 'e4', pts: -3, note: '1.e4 — best by test. Фишер одобряет.' },
         { m: '1.d4', h: 'Ферзевая пешка', from: 'd2', to: 'd4', pts: 10, note: 'Закрытые дебюты, закрытая личность. Записали.' },
         { m: '1.c4', h: 'Английское начало', from: 'c2', to: 'c4', pts: 7, note: 'Английское начало. Чай с оттопыренным мизинцем засчитан.' },
         { m: '1.Кf3', h: 'Сначала конь', from: 'g1', to: 'f3', pts: 3, note: 'Конём с первого хода? Скрываешь намерения. Подозрительно.' }
@@ -310,7 +309,7 @@ footer .wrap { padding-block: 18px; }
         { m: '1...e5', h: 'Открытая игра', from: 'e7', to: 'e5', pts: 0, note: 'Открытая игра, открытое сердце. Чисто.' },
         { m: '1...c5', h: 'Сицилианская защита', from: 'c7', to: 'c5', pts: 0, note: 'Сицилианская. Агрессия и острота засчитаны.' },
         { m: '1...e6', h: 'Французская защита', from: 'e7', to: 'e6', pts: 0, note: 'Французская. Солидно, по-мужски, с багетом под мышкой.' },
-        { m: '1...c6', h: 'Каро-Канн', from: 'c7', to: 'c6', pts: 14, note: 'Каро-Канн. Защищаешься с первого хода. Гейометр это заметил.' },
+        { m: '1...c6', h: 'Каро-Канн', from: 'c7', to: 'c6', pts: 14, note: 'Каро-Канн. Защищаешься с первого хода. Записали.' },
         { m: '1...d6', h: 'Защита Пирца', from: 'd7', to: 'd6', pts: 14, note: 'Пирц. Пассивность занесена в протокол.' }
       ]
     },
@@ -323,7 +322,7 @@ footer .wrap { padding-block: 18px; }
         { m: '2.Кf3', h: 'Развитие', from: 'g1', to: 'f3', pts: 0, note: 'Развиваешь фигуры. Скучно, но правильно.' },
         { m: '2.Сc4', h: 'Слон на f7', from: 'f1', to: 'c4', pts: 4, note: 'Слон на c4 смотрит на f7 слишком влюблённо.' },
         { m: '2.Фh5', h: 'Ферзь вперёд', from: 'd1', to: 'h5', pts: 10, note: 'Ферзь вышел погулять на втором ходу. Детский мат, взрослые проблемы.' },
-        { m: '2.Кре2', h: 'Бонгклауд', from: 'e1', to: 'e2', pts: -8, note: 'БОНГКЛАУД! Сам Магнус так играл. Минус гейство, плюс аура.' }
+        { m: '2.Кре2', h: 'Бонгклауд', from: 'e1', to: 'e2', pts: -8, note: 'БОНГКЛАУД! Сам Магнус так играл. Аура зашкаливает.' }
       ]
     },
     {
@@ -342,7 +341,7 @@ footer .wrap { padding-block: 18px; }
       sub: 'Без доски. Просто смотрим тебе в глаза.',
       opts: [
         { m: 'Гукеш', h: 'Индия', pts: 14, note: 'Записали. Без комментариев.' },
-        { m: 'Синдаров', h: 'Узбекистан', pts: -5, note: 'Узбекская мощь. Гейометр уважительно опускается.' }
+        { m: 'Синдаров', h: 'Узбекистан', pts: -5, note: 'Узбекская мощь. Записали.' }
       ]
     },
     {
@@ -544,12 +543,9 @@ footer .wrap { padding-block: 18px; }
     score += o.pts;
     answers.push({ q: q.title, a: o.m, pts: o.pts });
     setTimeout(() => {
-      meter(score);
-      $('vDelta').textContent = o.pts > 0 ? `+${o.pts}% гейства` : o.pts < 0 ? `−${Math.abs(o.pts)}% гейства` : '0%. Чисто';
       $('vNote').textContent = o.note;
-      verdict.className = 'verdict ' + (o.pts > 0 ? 'bad' : 'good');
+      verdict.className = 'verdict';
       verdict.hidden = false;
-      if (o.pts >= 10) { document.querySelector('.meter').classList.remove('shake'); void document.body.offsetWidth; document.querySelector('.meter').classList.add('shake'); }
       nextBtn.textContent = idx === QUESTIONS.length - 1 ? 'Узнать результат' : 'Дальше';
       nextBtn.hidden = false;
       nextBtn.focus({ preventScroll: true });
@@ -566,12 +562,15 @@ footer .wrap { padding-block: 18px; }
   $('start').addEventListener('click', () => {
     intro.hidden = true; quiz.hidden = false;
     idx = 0; score = 0; answers = []; meter(0);
+    document.querySelector('.meter').hidden = true;
     render(); scrollTo({ top: 0 });
   });
 
   function showResult() {
     quiz.hidden = true; result.hidden = false;
     scrollTo({ top: 0 });
+    document.querySelector('.meter').hidden = false;
+    meter(score);
     const pct = Math.max(0, Math.min(100, Math.round(score)));
     const tier = TIERS.find(t => pct <= t.max);
     $('rTitle').textContent = tier.title;
